@@ -1,4 +1,4 @@
-const STUDENT_COUNT = 12;
+const STUDENT_COUNT = 8;
 const HEIGHT_MIN = 120;
 const HEIGHT_MAX = 180;
 
@@ -19,6 +19,8 @@ const inputErrorEl = document.getElementById("inputError");
 
 const codeCpp = document.getElementById("codeCpp");
 const codePy = document.getElementById("codePy");
+
+const EMOJIS = ["😀", "😃", "😄", "😁", "🙂", "😊", "😎", "🤓", "😺", "🧑‍🎓", "🧑‍💻", "🧑‍🔬"];
 
 let initialHeights = createRandomHeights();
 let heights = [...initialHeights];
@@ -126,6 +128,7 @@ function render() {
 
     const head = document.createElement("div");
     head.className = "head";
+    head.textContent = EMOJIS[idx % EMOJIS.length];
 
     const body = document.createElement("div");
     body.className = "body";

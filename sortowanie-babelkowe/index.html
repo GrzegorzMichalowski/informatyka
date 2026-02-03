@@ -32,7 +32,7 @@
 
     <section class="input-panel card">
       <div class="input-row">
-        <label for="heightsInput">Wzrosty uczniów (12 liczb w cm, rozdzielone przecinkami):</label>
+        <label for="heightsInput">Wzrosty uczniów (8 liczb w cm, rozdzielone przecinkami):</label>
         <textarea id="heightsInput" rows="2" placeholder="np. 132, 145, 138, 150, 141, 155, 129, 148, 136, 152, 140, 146"></textarea>
       </div>
       <div class="input-actions">
@@ -41,27 +41,30 @@
       </div>
     </section>
 
-    <section class="board card">
-      <div id="students" class="students" aria-live="polite"></div>
-    </section>
+    <section class="learning-zone">
+      <div class="visual-panel">
+        <section class="board card">
+          <div id="students" class="students" aria-live="polite"></div>
+        </section>
 
-    <section class="info">
-      <div class="status">
-        <span id="stepCounter">Krok: 0</span>
-        <span id="statusText">Gotowe do startu.</span>
+        <section class="info">
+          <div class="status">
+            <span id="stepCounter">Krok: 0</span>
+            <span id="statusText">Gotowe do startu.</span>
+          </div>
+          <div id="description" class="description"></div>
+          <div class="hover" id="hoverText">Wskazanie: najedź myszą na ucznia.</div>
+        </section>
+
+        <section class="legend">
+          <span class="dot current"></span> aktualna para porównywana
+          <span class="dot scan"></span> element po lewej
+          <span class="dot scan2"></span> element po prawej
+          <span class="dot sorted"></span> część posortowana
+        </section>
       </div>
-      <div id="description" class="description"></div>
-      <div class="hover" id="hoverText">Wskazanie: najedź myszą na ucznia.</div>
-    </section>
 
-    <section class="legend">
-      <span class="dot current"></span> aktualna para porównywana
-      <span class="dot scan"></span> element po lewej
-      <span class="dot scan2"></span> element po prawej
-      <span class="dot sorted"></span> część posortowana
-    </section>
-
-    <section class="code-area">
+      <section class="code-area">
       <div class="code-column">
         <h2>C++ (z komentarzami)</h2>
         <div class="code-block" id="codeCpp">
@@ -91,6 +94,11 @@
           <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">                a[j], a[j + 1] = a[j + 1], a[j]  # zamiana</span></div>
         </div>
       </div>
+      </section>
+    </section>
+
+    <section class="next-tool">
+      <a class="next-link" href="../sortowanie-wybieranie/">Następne narzędzie: sortowanie przez wybieranie →</a>
     </section>
   </main>
 
