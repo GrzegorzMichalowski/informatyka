@@ -29,6 +29,10 @@
         <input id="quietDefault" type="checkbox" />
         Tryb cichy domyślnie
       </label>
+      <label class="quiet-toggle slow-toggle">
+        <input id="slowCompare" type="checkbox" />
+        Wolniejsze porównania
+      </label>
       <div class="style-picker">
         <label for="styleSelect">Styl postaci</label>
         <select id="styleSelect">
@@ -36,6 +40,7 @@
           <option value="sport">Sportowy</option>
           <option value="pastel">Pastelowy</option>
         </select>
+        <div id="stylePreview" class="style-preview" aria-hidden="true"></div>
       </div>
       <div class="speed">
         <label for="speedRange">Tempo</label>
@@ -75,6 +80,7 @@
           <span class="dot min"></span> najmniejszy znaleziony
           <span class="dot sorted"></span> część posortowana
         </section>
+        <div class="sound-legend">Dźwięki: niski = porównanie, wyższy = zamiana.</div>
       </div>
 
       <section class="code-area">

@@ -11,6 +11,8 @@ const newSetBtn = document.getElementById("newSetBtn");
 const soundBtn = document.getElementById("soundBtn");
 const quietDefault = document.getElementById("quietDefault");
 const styleSelect = document.getElementById("styleSelect");
+const stylePreview = document.getElementById("stylePreview");
+const slowCompare = document.getElementById("slowCompare");
 const speedRange = document.getElementById("speedRange");
 const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
@@ -44,6 +46,7 @@ const STYLES = {
   },
 };
 const STYLE_KEY = "informatykaAvatarStyle";
+const SLOW_KEY = "informatykaSlowCompare";
 
 let initialHeights = createRandomHeights();
 let heights = [...initialHeights];
@@ -185,6 +188,12 @@ function createAvatarSvg(idx) {
 
   svg.append(head, hairTop, eye1, eye2, body, belt, leg1, leg2, shoe1, shoe2);
   return svg;
+}
+
+function renderStylePreview() {
+  if (!stylePreview) return;
+  stylePreview.innerHTML = "";
+  stylePreview.appendChild(createAvatarSvg(0));
 }
 
 function createSteps(arr) {
@@ -399,15 +408,28 @@ function applyStep(step) {
   updateCodeHighlight(step.type);
 }
 
-function nextStep() {
+function nextDelayFor(step) {
+  const base = Number(speedRange.value);
+  if (slowCompare && slowCompare.checked && step && step.type === "compare") {
+    return Math.round(base * 1.6);
+  }
+  return base;
+}
+
+function scheduleNext() {
+  if (!running) return;
   if (stepIndex >= steps.length) {
     stop();
     return;
   }
-
-  const step = steps[stepIndex];
-  stepIndex += 1;
-  applyStep(step);
+  const upcoming = steps[stepIndex];
+  const delay = nextDelayFor(upcoming);
+  timer = setTimeout(() => {
+    const step = steps[stepIndex];
+    stepIndex += 1;
+    applyStep(step);
+    scheduleNext();
+  }, delay);
 }
 
 function start() {
@@ -415,11 +437,11 @@ function start() {
   ensureAudio();
   running = true;
   statusTextEl.textContent = "Sortowanie trwa...";
-  timer = setInterval(nextStep, Number(speedRange.value));
+  scheduleNext();
 }
 
 function stop() {
-  if (timer) clearInterval(timer);
+  if (timer) clearTimeout(timer);
   timer = null;
   running = false;
   statusTextEl.textContent = "Pauza / gotowe.";
@@ -450,7 +472,10 @@ pauseBtn.addEventListener("click", () => {
 stepBtn.addEventListener("click", () => {
   stop();
   ensureAudio();
-  nextStep();
+  if (stepIndex >= steps.length) return;
+  const step = steps[stepIndex];
+  stepIndex += 1;
+  applyStep(step);
 });
 
 resetBtn.addEventListener("click", () => {
@@ -500,6 +525,7 @@ speedRange.addEventListener("input", () => {
 if (styleSelect) {
   styleSelect.addEventListener("change", () => {
     localStorage.setItem(STYLE_KEY, styleSelect.value);
+    renderStylePreview();
     render();
   });
 }
@@ -513,6 +539,14 @@ const savedStyle = localStorage.getItem(STYLE_KEY);
 if (styleSelect && savedStyle) {
   styleSelect.value = savedStyle;
 }
+const savedSlow = localStorage.getItem(SLOW_KEY) === "1";
+if (slowCompare) {
+  slowCompare.checked = savedSlow;
+  slowCompare.addEventListener("change", () => {
+    localStorage.setItem(SLOW_KEY, slowCompare.checked ? "1" : "0");
+  });
+}
+renderStylePreview();
 render();
 updateStatus({ type: "init" });
 descriptionEl.textContent = "Gotowe do startu. Wybierz Start lub Krok.";

@@ -45,6 +45,21 @@
   background: #fff;
 }
 
+.style-preview {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: #f7f4ff;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(78, 140, 255, 0.35);
+}
+
+.style-preview svg {
+  width: 20px;
+  height: 24px;
+}
+
 .breadcrumbs {
   margin-bottom: 8px;
   font-size: 0.95rem;
@@ -219,6 +234,13 @@
   margin-top: 16px;
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+.sound-legend {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--accent-2);
+  text-align: center;
 }
 
 .learning-zone {
