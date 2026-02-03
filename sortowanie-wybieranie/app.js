@@ -422,8 +422,15 @@ function applyStep(step) {
   updateCodeHighlight(step.type);
 }
 
+function getBaseDelay() {
+  const min = Number(speedRange.min);
+  const max = Number(speedRange.max);
+  const value = Number(speedRange.value);
+  return Math.max(120, min + max - value);
+}
+
 function nextDelayFor(step) {
-  const base = Number(speedRange.value);
+  const base = getBaseDelay();
   if (slowCompare && slowCompare.checked && step && step.type === "compare") {
     return Math.round(base * 1.6);
   }
