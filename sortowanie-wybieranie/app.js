@@ -81,6 +81,90 @@ function parseHeightsInput(value) {
   return { values: numbers };
 }
 
+function createAvatarSvg(idx) {
+  const svgNs = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNs, "svg");
+  svg.setAttribute("viewBox", "0 0 60 120");
+  svg.setAttribute("preserveAspectRatio", "none");
+
+  const skin = SKIN_TONES[idx % SKIN_TONES.length];
+  const hair = HAIR_COLORS[idx % HAIR_COLORS.length];
+  const shirt = SHIRT_COLORS[idx % SHIRT_COLORS.length];
+  const pants = PANTS_COLORS[idx % PANTS_COLORS.length];
+
+  const head = document.createElementNS(svgNs, "circle");
+  head.setAttribute("cx", "30");
+  head.setAttribute("cy", "20");
+  head.setAttribute("r", "12");
+  head.setAttribute("fill", skin);
+
+  const hairTop = document.createElementNS(svgNs, "path");
+  hairTop.setAttribute("d", "M18 18 C20 6, 40 6, 42 18 Z");
+  hairTop.setAttribute("fill", hair);
+
+  const eye1 = document.createElementNS(svgNs, "circle");
+  eye1.setAttribute("cx", "26");
+  eye1.setAttribute("cy", "20");
+  eye1.setAttribute("r", "2");
+  eye1.setAttribute("fill", "#1b1a2b");
+
+  const eye2 = document.createElementNS(svgNs, "circle");
+  eye2.setAttribute("cx", "34");
+  eye2.setAttribute("cy", "20");
+  eye2.setAttribute("r", "2");
+  eye2.setAttribute("fill", "#1b1a2b");
+
+  const body = document.createElementNS(svgNs, "rect");
+  body.setAttribute("x", "18");
+  body.setAttribute("y", "34");
+  body.setAttribute("width", "24");
+  body.setAttribute("height", "36");
+  body.setAttribute("rx", "6");
+  body.setAttribute("fill", shirt);
+
+  const belt = document.createElementNS(svgNs, "rect");
+  belt.setAttribute("x", "18");
+  belt.setAttribute("y", "66");
+  belt.setAttribute("width", "24");
+  belt.setAttribute("height", "6");
+  belt.setAttribute("fill", "#2b2b3b");
+
+  const leg1 = document.createElementNS(svgNs, "rect");
+  leg1.setAttribute("x", "18");
+  leg1.setAttribute("y", "72");
+  leg1.setAttribute("width", "10");
+  leg1.setAttribute("height", "38");
+  leg1.setAttribute("rx", "3");
+  leg1.setAttribute("fill", pants);
+
+  const leg2 = document.createElementNS(svgNs, "rect");
+  leg2.setAttribute("x", "32");
+  leg2.setAttribute("y", "72");
+  leg2.setAttribute("width", "10");
+  leg2.setAttribute("height", "38");
+  leg2.setAttribute("rx", "3");
+  leg2.setAttribute("fill", pants);
+
+  const shoe1 = document.createElementNS(svgNs, "rect");
+  shoe1.setAttribute("x", "16");
+  shoe1.setAttribute("y", "110");
+  shoe1.setAttribute("width", "14");
+  shoe1.setAttribute("height", "6");
+  shoe1.setAttribute("rx", "3");
+  shoe1.setAttribute("fill", "#1b1a2b");
+
+  const shoe2 = document.createElementNS(svgNs, "rect");
+  shoe2.setAttribute("x", "30");
+  shoe2.setAttribute("y", "110");
+  shoe2.setAttribute("width", "14");
+  shoe2.setAttribute("height", "6");
+  shoe2.setAttribute("rx", "3");
+  shoe2.setAttribute("fill", "#1b1a2b");
+
+  svg.append(head, hairTop, eye1, eye2, body, belt, leg1, leg2, shoe1, shoe2);
+  return svg;
+}
+
 function createSteps(arr) {
   const copy = [...arr];
   const out = [];
@@ -159,18 +243,15 @@ function render() {
     student.dataset.index = String(idx + 1);
     student.dataset.height = String(height);
 
-    const head = document.createElement("div");
-    head.className = "head";
-    head.textContent = EMOJIS[idx % EMOJIS.length];
-
-    const body = document.createElement("div");
-    body.className = "body";
+    const person = document.createElement("div");
+    person.className = "person";
+    person.appendChild(createAvatarSvg(idx));
 
     const label = document.createElement("div");
     label.className = "label";
     label.textContent = `${height} cm`;
 
-    student.append(head, body, label);
+    student.append(person, label);
     studentsEl.appendChild(student);
 
     student.addEventListener("mouseenter", () => {
@@ -365,6 +446,14 @@ soundBtn.addEventListener("click", () => {
   if (soundEnabled) ensureAudio();
 });
 
+quietDefault.addEventListener("change", () => {
+  const muted = quietDefault.checked;
+  localStorage.setItem(MUTE_KEY, muted ? "1" : "0");
+  soundEnabled = !muted;
+  soundBtn.textContent = soundEnabled ? "Dźwięk: WŁ" : "Dźwięk: WYŁ";
+  if (soundEnabled) ensureAudio();
+});
+
 applyHeightsBtn.addEventListener("click", () => {
   const { values, error } = parseHeightsInput(heightsInput.value);
   if (error) {
@@ -385,6 +474,10 @@ speedRange.addEventListener("input", () => {
 });
 
 setInputValue(initialHeights);
+const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";
+quietDefault.checked = mutedDefault;
+soundEnabled = !mutedDefault;
+soundBtn.textContent = soundEnabled ? "Dźwięk: WŁ" : "Dźwięk: WYŁ";
 render();
 updateStatus({ type: "init" });
 descriptionEl.textContent = "Gotowe do startu. Wybierz Start lub Krok.";
