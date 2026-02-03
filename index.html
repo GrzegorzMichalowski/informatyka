@@ -3,59 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sortowanie przez wybieranie - wizualizacja</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Narzędzia Nauczyciela – Informatyka</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <link rel="stylesheet" href="css/home.css" />
 </head>
 <body>
   <main class="page">
     <header class="hero">
-      <h1>Sortowanie przez wybieranie</h1>
-      <p class="subtitle">Ustawiamy uczniów według wzrostu, krok po kroku.</p>
+      <h1>Narzędzia Nauczyciela – Informatyka</h1>
+      <p class="subtitle">Krótkie, wizualne pomoce dydaktyczne do pracy w klasie.</p>
     </header>
 
-    <section class="controls">
-      <button id="startBtn">Start</button>
-      <button id="pauseBtn">Pauza</button>
-      <button id="stepBtn">Krok</button>
-      <button id="resetBtn">Reset</button>
-      <button id="newSetBtn" class="secondary">Nowy zestaw</button>
-      <div class="speed">
-        <label for="speedRange">Tempo</label>
-        <input id="speedRange" type="range" min="300" max="1400" value="900" step="100" />
-      </div>
-    </section>
-
-    <section class="input-panel">
-      <div class="input-row">
-        <label for="heightsInput">Wzrosty uczniów (12 liczb w cm, rozdzielone przecinkami):</label>
-        <textarea id="heightsInput" rows="2" placeholder="np. 132, 145, 138, 150, 141, 155, 129, 148, 136, 152, 140, 146"></textarea>
-      </div>
-      <div class="input-actions">
-        <button id="applyHeightsBtn" class="secondary">Ustaw wzrosty</button>
-        <span id="inputError" class="input-error" aria-live="polite"></span>
-      </div>
-    </section>
-
-    <section class="board">
-      <div id="students" class="students" aria-live="polite"></div>
-    </section>
-
-    <section class="info">
-      <div class="status">
-        <span id="stepCounter">Krok: 0</span>
-        <span id="statusText">Gotowe do startu.</span>
-      </div>
-      <div id="description" class="description"></div>
-    </section>
-
-    <section class="legend">
-      <span class="dot current"></span> aktualna pozycja i
-      <span class="dot scan"></span> sprawdzany uczeń j
-      <span class="dot min"></span> najmniejszy znaleziony
-      <span class="dot sorted"></span> część posortowana
+    <section class="tools-grid">
+      <a class="card tool-card" href="sortowanie-wybieranie/">
+        <h2 class="tool-title">Sortowanie przez wybieranie</h2>
+        <p class="tool-desc">Ustawianie uczniów według wzrostu z animacją krok po kroku.</p>
+        <span class="tool-footer">Otwórz narzędzie →</span>
+      </a>
     </section>
   </main>
-
-  <script src="app.js"></script>
 </body>
 </html>
