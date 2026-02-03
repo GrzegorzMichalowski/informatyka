@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sortowanie bąbelkowe – wizualizacja</title>
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="babelkowe.css" />
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs">
+      <a href="../index.html">← Powrót do strony głównej</a>
+    </nav>
+
+    <header class="hero">
+      <h1>Sortowanie bąbelkowe</h1>
+      <p class="subtitle">„Przepychamy” największe elementy na koniec, krok po kroku.</p>
+    </header>
+
+    <section class="controls">
+      <button id="startBtn">Start</button>
+      <button id="pauseBtn">Pauza</button>
+      <button id="stepBtn">Krok</button>
+      <button id="resetBtn">Reset</button>
+      <button id="newSetBtn" class="secondary">Nowy zestaw</button>
+      <div class="speed">
+        <label for="speedRange">Tempo</label>
+        <input id="speedRange" type="range" min="300" max="1400" value="900" step="100" />
+      </div>
+    </section>
+
+    <section class="input-panel card">
+      <div class="input-row">
+        <label for="heightsInput">Wzrosty uczniów (12 liczb w cm, rozdzielone przecinkami):</label>
+        <textarea id="heightsInput" rows="2" placeholder="np. 132, 145, 138, 150, 141, 155, 129, 148, 136, 152, 140, 146"></textarea>
+      </div>
+      <div class="input-actions">
+        <button id="applyHeightsBtn" class="secondary">Ustaw wzrosty</button>
+        <span id="inputError" class="input-error" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="board card">
+      <div id="students" class="students" aria-live="polite"></div>
+    </section>
+
+    <section class="info">
+      <div class="status">
+        <span id="stepCounter">Krok: 0</span>
+        <span id="statusText">Gotowe do startu.</span>
+      </div>
+      <div id="description" class="description"></div>
+      <div class="hover" id="hoverText">Wskazanie: najedź myszą na ucznia.</div>
+    </section>
+
+    <section class="legend">
+      <span class="dot current"></span> aktualna para porównywana
+      <span class="dot scan"></span> element po lewej
+      <span class="dot scan2"></span> element po prawej
+      <span class="dot sorted"></span> część posortowana
+    </section>
+
+    <section class="code-area">
+      <div class="code-column">
+        <h2>C++ (z komentarzami)</h2>
+        <div class="code-block" id="codeCpp">
+          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">// Sortowanie bąbelkowe</span></div>
+          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">void bubbleSort(vector&lt;int&gt;&amp; a) {</span></div>
+          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">  int n = a.size();</span></div>
+          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">  for (int i = 0; i &lt; n - 1; i++) { // kolejne przebiegi</span></div>
+          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">    for (int j = 0; j &lt; n - i - 1; j++) { // porównujemy pary</span></div>
+          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">      if (a[j] &gt; a[j + 1]) { // jeśli kolejność zła</span></div>
+          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">        swap(a[j], a[j + 1]); // zamiana sąsiadów</span></div>
+          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">      }</span></div>
+          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">    }</span></div>
+          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">  }</span></div>
+          <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">}</span></div>
+        </div>
+      </div>
+
+      <div class="code-column">
+        <h2>Python (z komentarzami)</h2>
+        <div class="code-block" id="codePy">
+          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text"># Sortowanie bąbelkowe</span></div>
+          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">def bubble_sort(a):</span></div>
+          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">    n = len(a)</span></div>
+          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">    for i in range(n - 1):  # kolejne przebiegi</span></div>
+          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">        for j in range(n - i - 1):  # porównujemy pary</span></div>
+          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">            if a[j] &gt; a[j + 1]:  # zła kolejność</span></div>
+          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">                a[j], a[j + 1] = a[j + 1], a[j]  # zamiana</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
