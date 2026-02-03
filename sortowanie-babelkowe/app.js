@@ -10,6 +10,7 @@ const resetBtn = document.getElementById("resetBtn");
 const newSetBtn = document.getElementById("newSetBtn");
 const soundBtn = document.getElementById("soundBtn");
 const quietDefault = document.getElementById("quietDefault");
+const styleSelect = document.getElementById("styleSelect");
 const speedRange = document.getElementById("speedRange");
 const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
@@ -22,10 +23,27 @@ const inputErrorEl = document.getElementById("inputError");
 const codeCpp = document.getElementById("codeCpp");
 const codePy = document.getElementById("codePy");
 
-const SKIN_TONES = ["#f5cfa0", "#f1b97a", "#e6a572", "#d9915b"];
-const HAIR_COLORS = ["#2e1d14", "#5a3b22", "#1b1b1b", "#8b5a2b", "#b06a4a"];
-const SHIRT_COLORS = ["#ff7a59", "#4e8cff", "#21c07a", "#ffcc4d", "#9b5de5"];
-const PANTS_COLORS = ["#3b3b3b", "#2c4b6b", "#4b2c2c", "#3c5f4a"];
+const STYLES = {
+  school: {
+    skin: ["#f5cfa0", "#f1b97a", "#e6a572", "#d9915b"],
+    hair: ["#2e1d14", "#5a3b22", "#1b1b1b", "#8b5a2b", "#b06a4a"],
+    shirts: ["#ff7a59", "#4e8cff", "#21c07a", "#ffcc4d", "#9b5de5"],
+    pants: ["#3b3b3b", "#2c4b6b", "#4b2c2c", "#3c5f4a"],
+  },
+  sport: {
+    skin: ["#f5cfa0", "#f1b97a", "#e6a572", "#d9915b"],
+    hair: ["#1b1b1b", "#2e1d14", "#8b5a2b"],
+    shirts: ["#ff3b3b", "#ffb703", "#3a86ff", "#00b4d8"],
+    pants: ["#1b263b", "#14213d", "#2b2d42"],
+  },
+  pastel: {
+    skin: ["#f6d8c9", "#f2c4b3", "#e9b89f"],
+    hair: ["#5e4b56", "#7a5c61", "#3d3b40"],
+    shirts: ["#bde0fe", "#ffc8dd", "#cdb4db", "#a2d2ff"],
+    pants: ["#a0a0a0", "#8d99ae", "#b0a8b9"],
+  },
+};
+const STYLE_KEY = "informatykaAvatarStyle";
 
 let initialHeights = createRandomHeights();
 let heights = [...initialHeights];
@@ -79,16 +97,22 @@ function parseHeightsInput(value) {
   return { values: numbers };
 }
 
+function getStylePalette() {
+  const style = styleSelect ? styleSelect.value : "school";
+  return STYLES[style] || STYLES.school;
+}
+
 function createAvatarSvg(idx) {
   const svgNs = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(svgNs, "svg");
   svg.setAttribute("viewBox", "0 0 60 120");
   svg.setAttribute("preserveAspectRatio", "none");
 
-  const skin = SKIN_TONES[idx % SKIN_TONES.length];
-  const hair = HAIR_COLORS[idx % HAIR_COLORS.length];
-  const shirt = SHIRT_COLORS[idx % SHIRT_COLORS.length];
-  const pants = PANTS_COLORS[idx % PANTS_COLORS.length];
+  const palette = getStylePalette();
+  const skin = palette.skin[idx % palette.skin.length];
+  const hair = palette.hair[idx % palette.hair.length];
+  const shirt = palette.shirts[idx % palette.shirts.length];
+  const pants = palette.pants[idx % palette.pants.length];
 
   const head = document.createElementNS(svgNs, "circle");
   head.setAttribute("cx", "30");
@@ -232,6 +256,21 @@ function playBeep() {
   osc.stop(audioCtx.currentTime + 0.14);
 }
 
+function playCompareBeep() {
+  if (!soundEnabled || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.value = 330;
+  gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.07, audioCtx.currentTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.09);
+}
+
 function render() {
   studentsEl.innerHTML = "";
   const scale = 2.1;
@@ -331,6 +370,7 @@ function applyStep(step) {
 
   if (step.type === "compare") {
     currentJ = step.j;
+    playCompareBeep();
   }
 
   if (step.type === "swap") {
@@ -457,11 +497,22 @@ speedRange.addEventListener("input", () => {
   }
 });
 
+if (styleSelect) {
+  styleSelect.addEventListener("change", () => {
+    localStorage.setItem(STYLE_KEY, styleSelect.value);
+    render();
+  });
+}
+
 setInputValue(initialHeights);
 const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";
 quietDefault.checked = mutedDefault;
 soundEnabled = !mutedDefault;
 soundBtn.textContent = soundEnabled ? "Dźwięk: WŁ" : "Dźwięk: WYŁ";
+const savedStyle = localStorage.getItem(STYLE_KEY);
+if (styleSelect && savedStyle) {
+  styleSelect.value = savedStyle;
+}
 render();
 updateStatus({ type: "init" });
 descriptionEl.textContent = "Gotowe do startu. Wybierz Start lub Krok.";

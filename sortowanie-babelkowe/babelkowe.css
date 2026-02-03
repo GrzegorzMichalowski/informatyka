@@ -24,6 +24,27 @@
   accent-color: var(--accent-4);
 }
 
+.style-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px var(--shadow);
+  border: 2px solid rgba(78, 140, 255, 0.2);
+}
+
+.style-picker select {
+  border-radius: 10px;
+  border: 1px solid #cfd3ff;
+  padding: 4px 8px;
+  font-family: inherit;
+  background: #fff;
+}
+
 .breadcrumbs {
   margin-bottom: 8px;
   font-size: 0.95rem;
