@@ -1,4 +1,4 @@
-const STUDENT_COUNT = 8;
+const STUDENT_COUNT = 5;
 const HEIGHT_MIN = 120;
 const HEIGHT_MAX = 180;
 
