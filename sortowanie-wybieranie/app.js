@@ -9,6 +9,7 @@ const stepBtn = document.getElementById("stepBtn");
 const resetBtn = document.getElementById("resetBtn");
 const newSetBtn = document.getElementById("newSetBtn");
 const soundBtn = document.getElementById("soundBtn");
+const quietDefault = document.getElementById("quietDefault");
 const speedRange = document.getElementById("speedRange");
 const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
@@ -21,7 +22,10 @@ const inputErrorEl = document.getElementById("inputError");
 const codeCpp = document.getElementById("codeCpp");
 const codePy = document.getElementById("codePy");
 
-const EMOJIS = ["😀", "😃", "😄", "😁", "🙂", "😊", "😎", "🤓", "😺", "🧑‍🎓", "🧑‍💻", "🧑‍🔬"];
+const SKIN_TONES = ["#f5cfa0", "#f1b97a", "#e6a572", "#d9915b"];
+const HAIR_COLORS = ["#2e1d14", "#5a3b22", "#1b1b1b", "#8b5a2b", "#b06a4a"];
+const SHIRT_COLORS = ["#ff7a59", "#4e8cff", "#21c07a", "#ffcc4d", "#9b5de5"];
+const PANTS_COLORS = ["#3b3b3b", "#2c4b6b", "#4b2c2c", "#3c5f4a"];
 
 let initialHeights = createRandomHeights();
 let heights = [...initialHeights];
@@ -35,6 +39,7 @@ let currentJ = null;
 let currentMin = null;
 let soundEnabled = true;
 let audioCtx = null;
+const MUTE_KEY = "informatykaMuteDefault";
 
 const codeMap = {
   select_i: { cpp: [4, 5], py: [4, 5] },
