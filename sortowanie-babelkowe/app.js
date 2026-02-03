@@ -8,6 +8,7 @@ const pauseBtn = document.getElementById("pauseBtn");
 const stepBtn = document.getElementById("stepBtn");
 const resetBtn = document.getElementById("resetBtn");
 const newSetBtn = document.getElementById("newSetBtn");
+const soundBtn = document.getElementById("soundBtn");
 const speedRange = document.getElementById("speedRange");
 const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
@@ -30,6 +31,8 @@ let timer = null;
 let running = false;
 let sortedFrom = heights.length;
 let currentJ = null;
+let soundEnabled = true;
+let audioCtx = null;
 
 const codeMap = {
   start_pass: { cpp: [4], py: [4] },
@@ -113,6 +116,31 @@ function createSteps(arr) {
 
   out.push({ type: "done" });
   return out;
+}
+
+function ensureAudio() {
+  if (!soundEnabled) return;
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+function playBeep() {
+  if (!soundEnabled || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "square";
+  osc.frequency.value = 440;
+  gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.14);
 }
 
 function render() {
@@ -222,6 +250,7 @@ function applyStep(step) {
   if (step.type === "swap") {
     currentJ = step.j;
     [heights[step.j], heights[step.j + 1]] = [heights[step.j + 1], heights[step.j]];
+    playBeep();
   }
 
   if (step.type === "no_swap") {
@@ -257,6 +286,7 @@ function nextStep() {
 
 function start() {
   if (running) return;
+  ensureAudio();
   running = true;
   statusTextEl.textContent = "Sortowanie trwa...";
   timer = setInterval(nextStep, Number(speedRange.value));
@@ -293,6 +323,7 @@ pauseBtn.addEventListener("click", () => {
 
 stepBtn.addEventListener("click", () => {
   stop();
+  ensureAudio();
   nextStep();
 });
 
@@ -305,6 +336,12 @@ newSetBtn.addEventListener("click", () => {
   reset();
   setInputValue(initialHeights);
   inputErrorEl.textContent = "";
+});
+
+soundBtn.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  soundBtn.textContent = soundEnabled ? "Dźwięk: WŁ" : "Dźwięk: WYŁ";
+  if (soundEnabled) ensureAudio();
 });
 
 applyHeightsBtn.addEventListener("click", () => {

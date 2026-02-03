@@ -1,12 +1,13 @@
 :root {
-  --bg: #f6f3ed;
-  --ink: #1d1a17;
-  --accent: #d98b5f;
-  --accent-2: #3f6d8c;
-  --accent-3: #8c4a4a;
-  --muted: #6f655d;
-  --card: #fffaf2;
-  --shadow: rgba(29, 26, 23, 0.15);
+  --bg: #f7f4ff;
+  --ink: #1b1a2b;
+  --accent: #ff7a59;
+  --accent-2: #4e8cff;
+  --accent-3: #ff4d6d;
+  --accent-4: #21c07a;
+  --muted: #5b5a6b;
+  --card: #ffffff;
+  --shadow: rgba(27, 26, 43, 0.18);
 }
 
 * {
@@ -15,8 +16,12 @@
 
 body {
   margin: 0;
-  font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #ffffff 0%, #f1e9dc 55%, #e7dbc9 100%);
+  font-family: "Comic Sans MS", "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 122, 89, 0.18), transparent 40%),
+    radial-gradient(circle at 90% 12%, rgba(78, 140, 255, 0.18), transparent 40%),
+    radial-gradient(circle at 20% 90%, rgba(33, 192, 122, 0.18), transparent 40%),
+    #f7f4ff;
   color: var(--ink);
 }
 
@@ -59,12 +64,12 @@ button.secondary {
 }
 
 button.secondary:hover {
-  background: #325a73;
+  background: #3a76e0;
 }
 
 button:hover {
   transform: translateY(-2px);
-  background: #c97a4d;
+  background: #e86645;
 }
 
 button:disabled {
@@ -78,6 +83,7 @@ button:disabled {
   border-radius: 24px;
   padding: 20px;
   box-shadow: 0 10px 24px var(--shadow);
+  border: 2px solid rgba(78, 140, 255, 0.15);
 }
 
 @media (max-width: 720px) {
