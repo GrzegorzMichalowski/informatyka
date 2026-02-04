@@ -14,17 +14,6 @@
       <p class="subtitle">Krótkie, wizualne pomoce dydaktyczne do pracy w klasie.</p>
     </header>
 
-    <section class="card home-controls">
-      <h2>Rozmiar danych</h2>
-      <p>Wybierz liczbę elementów dla narzędzi opartych na danych (zliczanie i wyszukiwanie).</p>
-      <div class="preset-row" id="presetRow">
-        <button class="secondary preset-btn" data-n="5">5</button>
-        <button class="secondary preset-btn" data-n="10">10</button>
-        <button class="secondary preset-btn" data-n="20">20</button>
-        <button class="secondary preset-btn" data-n="30">30</button>
-      </div>
-    </section>
-
     <section class="tools-grid">
       <a class="card tool-card" href="sortowanie-wybieranie/">
         <h2 class="tool-title">Sortowanie przez wybieranie</h2>
@@ -54,33 +43,5 @@
     </section>
   </main>
 
-  <script>
-    const presetRow = document.getElementById("presetRow");
-    const links = [
-      "sortowanie-wybieranie/",
-      "sortowanie-babelkowe/",
-      "sortowanie-zliczanie/",
-      "wyszukiwanie-binarne/",
-      "wyszukiwanie-nieuporzadkowane/"
-    ];
-    function updateLinks(n) {
-      document.querySelectorAll(".tools-grid a").forEach((a) => {
-        const href = a.getAttribute("href");
-        if (links.includes(href)) {
-          a.setAttribute("href", `${href}?n=${n}`);
-        }
-      });
-    }
-    presetRow.addEventListener("click", (e) => {
-      const btn = e.target.closest(".preset-btn");
-      if (!btn) return;
-      const n = btn.dataset.n;
-      updateLinks(n);
-      presetRow.querySelectorAll(".preset-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-    updateLinks(5);
-    presetRow.querySelector(".preset-btn[data-n='5']").classList.add("active");
-  </script>
 </body>
 </html>
