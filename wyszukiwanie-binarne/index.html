@@ -37,8 +37,12 @@
 
     <section class="input-panel card">
       <div class="input-row">
-        <label for="valuesInput">Wartości (5 liczb rosnąco, rozdzielone przecinkami):</label>
+        <label for="valuesInput">Wartości (1–30 liczb rosnąco, rozdzielone przecinkami):</label>
         <textarea id="valuesInput" rows="2" placeholder="np. 2, 4, 6, 8, 10"></textarea>
+      </div>
+      <div class="input-row">
+        <label for="countInput">Liczba elementów (1–30):</label>
+        <input id="countInput" type="number" min="1" max="30" value="5" />
       </div>
       <div class="input-row">
         <label for="targetInput">Szukana wartość:</label>

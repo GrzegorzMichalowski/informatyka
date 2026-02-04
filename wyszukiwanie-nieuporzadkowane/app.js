@@ -1,4 +1,4 @@
-const N = 5;
+let N = 5;
 
 const arrayRow = document.getElementById("arrayRow");
 const startBtn = document.getElementById("startBtn");
@@ -13,6 +13,7 @@ const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
 const descriptionEl = document.getElementById("description");
 const valuesInput = document.getElementById("valuesInput");
+const countInput = document.getElementById("countInput");
 const targetInput = document.getElementById("targetInput");
 const applyValuesBtn = document.getElementById("applyValuesBtn");
 const inputErrorEl = document.getElementById("inputError");
@@ -28,7 +29,7 @@ const codeMap = {
   done: { cpp: [6], py: [7] },
 };
 
-let arr = createValues();
+let arr = createValues(N);
 let target = arr[2];
 let steps = createSteps(arr, target);
 let stepIndex = 0;
@@ -43,8 +44,8 @@ function setInputValue(vals) {
   valuesInput.value = vals.join(", ");
 }
 
-function createValues() {
-  return Array.from({ length: N }, () => Math.floor(Math.random() * 20));
+function createValues(count) {
+  return Array.from({ length: count }, () => Math.floor(Math.random() * 20));
 }
 
 function parseValuesInput(value) {
@@ -53,8 +54,8 @@ function parseValuesInput(value) {
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 
-  if (raw.length !== N) {
-    return { error: `Podaj dokładnie ${N} liczb.` };
+  if (raw.length < 1 || raw.length > 30) {
+    return { error: "Podaj od 1 do 30 liczb." };
   }
 
   const numbers = raw.map((item) => Number(item));
@@ -259,9 +260,13 @@ resetBtn.addEventListener("click", () => {
 });
 
 newSetBtn.addEventListener("click", () => {
-  arr = createValues();
+  const count = getCountInput();
+  if (count === null) return;
+  N = count;
+  arr = createValues(N);
   target = arr[Math.floor(Math.random() * arr.length)];
   setInputValue(arr);
+  countInput.value = String(N);
   targetInput.value = target;
   reset();
   inputErrorEl.textContent = "";
@@ -293,6 +298,8 @@ applyValuesBtn.addEventListener("click", () => {
     return;
   }
   inputErrorEl.textContent = "";
+  N = newValues.length;
+  countInput.value = String(N);
   arr = newValues;
   target = t;
   reset();
@@ -305,7 +312,17 @@ speedRange.addEventListener("input", () => {
   }
 });
 
+function getCountInput() {
+  const count = Number(countInput.value);
+  if (Number.isNaN(count) || count < 1 || count > 30) {
+    inputErrorEl.textContent = "Liczba elementów musi być z zakresu 1–30.";
+    return null;
+  }
+  return Math.floor(count);
+}
+
 setInputValue(arr);
+countInput.value = String(N);
 targetInput.value = target;
 const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";
 quietDefault.checked = mutedDefault;

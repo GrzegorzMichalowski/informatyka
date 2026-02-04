@@ -46,8 +46,12 @@
 
     <section class="input-panel card">
       <div class="input-row">
-        <label for="valuesInput">Wartości (5 liczb od 0 do 9, rozdzielone przecinkami):</label>
+        <label for="valuesInput">Wartości (1–30 liczb od 0 do 9, rozdzielone przecinkami):</label>
         <textarea id="valuesInput" rows="2" placeholder="np. 4, 2, 7, 3, 2"></textarea>
+      </div>
+      <div class="input-row">
+        <label for="countInput">Liczba elementów (1–30):</label>
+        <input id="countInput" type="number" min="1" max="30" value="5" />
       </div>
       <div class="input-actions">
         <button id="applyValuesBtn" class="secondary">Ustaw wartości</button>

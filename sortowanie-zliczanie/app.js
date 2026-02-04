@@ -1,4 +1,4 @@
-const N = 5;
+let N = 5;
 const MAXV = 9;
 
 const valuesRow = document.getElementById("valuesRow");
@@ -18,6 +18,7 @@ const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
 const descriptionEl = document.getElementById("description");
 const valuesInput = document.getElementById("valuesInput");
+const countInput = document.getElementById("countInput");
 const applyValuesBtn = document.getElementById("applyValuesBtn");
 const inputErrorEl = document.getElementById("inputError");
 
@@ -55,7 +56,7 @@ const codeMap = {
   done: { cpp: [], py: [] },
 };
 
-let values = createRandomValues();
+let values = createRandomValues(N);
 let counts = Array(MAXV + 1).fill(0);
 let output = Array(N).fill(null);
 let steps = createSteps(values);
@@ -73,9 +74,9 @@ function setInputValue(vals) {
   valuesInput.value = vals.join(", ");
 }
 
-function createRandomValues() {
+function createRandomValues(count) {
   const result = [];
-  for (let i = 0; i < N; i += 1) {
+  for (let i = 0; i < count; i += 1) {
     result.push(Math.floor(Math.random() * (MAXV + 1)));
   }
   return result;
@@ -87,8 +88,8 @@ function parseValuesInput(value) {
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 
-  if (raw.length !== N) {
-    return { error: `Podaj dokładnie ${N} liczb.` };
+  if (raw.length < 1 || raw.length > 30) {
+    return { error: "Podaj od 1 do 30 liczb." };
   }
 
   const numbers = raw.map((item) => Number(item));
@@ -517,8 +518,12 @@ resetBtn.addEventListener("click", () => {
 });
 
 newSetBtn.addEventListener("click", () => {
-  values = createRandomValues();
+  const count = getCountInput();
+  if (count === null) return;
+  N = count;
+  values = createRandomValues(N);
   setInputValue(values);
+  countInput.value = String(N);
   reset();
   inputErrorEl.textContent = "";
 });
@@ -544,6 +549,8 @@ applyValuesBtn.addEventListener("click", () => {
     return;
   }
   inputErrorEl.textContent = "";
+  N = newValues.length;
+  countInput.value = String(N);
   values = newValues;
   reset();
 });
@@ -563,7 +570,17 @@ if (styleSelect) {
   });
 }
 
+function getCountInput() {
+  const count = Number(countInput.value);
+  if (Number.isNaN(count) || count < 1 || count > 30) {
+    inputErrorEl.textContent = "Liczba elementów musi być z zakresu 1–30.";
+    return null;
+  }
+  return Math.floor(count);
+}
+
 setInputValue(values);
+countInput.value = String(N);
 const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";
 quietDefault.checked = mutedDefault;
 soundEnabled = !mutedDefault;

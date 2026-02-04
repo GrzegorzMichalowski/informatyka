@@ -184,7 +184,8 @@
 }
 
 .student.sorted .person {
-  filter: grayscale(0.9);
+  box-shadow: 0 0 0 3px rgba(33, 192, 122, 0.35);
+  border-radius: 12px;
 }
 
 .student:hover .person {

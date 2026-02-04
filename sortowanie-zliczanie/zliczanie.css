@@ -115,6 +115,16 @@
   background: #fff;
 }
 
+.input-row input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d6cabc;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #fff;
+}
+
 .input-actions {
   margin-top: 10px;
   display: flex;
