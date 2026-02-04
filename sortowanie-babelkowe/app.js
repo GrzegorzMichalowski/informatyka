@@ -147,6 +147,34 @@ function createAvatarSvg(idx) {
   body.setAttribute("rx", "6");
   body.setAttribute("fill", shirt);
 
+  const armLeft = document.createElementNS(svgNs, "rect");
+  armLeft.setAttribute("x", "12");
+  armLeft.setAttribute("y", "38");
+  armLeft.setAttribute("width", "8");
+  armLeft.setAttribute("height", "28");
+  armLeft.setAttribute("rx", "4");
+  armLeft.setAttribute("fill", shirt);
+
+  const armRight = document.createElementNS(svgNs, "rect");
+  armRight.setAttribute("x", "40");
+  armRight.setAttribute("y", "38");
+  armRight.setAttribute("width", "8");
+  armRight.setAttribute("height", "28");
+  armRight.setAttribute("rx", "4");
+  armRight.setAttribute("fill", shirt);
+
+  const handLeft = document.createElementNS(svgNs, "circle");
+  handLeft.setAttribute("cx", "16");
+  handLeft.setAttribute("cy", "66");
+  handLeft.setAttribute("r", "4");
+  handLeft.setAttribute("fill", skin);
+
+  const handRight = document.createElementNS(svgNs, "circle");
+  handRight.setAttribute("cx", "44");
+  handRight.setAttribute("cy", "66");
+  handRight.setAttribute("r", "4");
+  handRight.setAttribute("fill", skin);
+
   const belt = document.createElementNS(svgNs, "rect");
   belt.setAttribute("x", "18");
   belt.setAttribute("y", "66");
@@ -186,7 +214,7 @@ function createAvatarSvg(idx) {
   shoe2.setAttribute("rx", "3");
   shoe2.setAttribute("fill", "#1b1a2b");
 
-  svg.append(head, hairTop, eye1, eye2, body, belt, leg1, leg2, shoe1, shoe2);
+  svg.append(head, hairTop, eye1, eye2, armLeft, armRight, handLeft, handRight, body, belt, leg1, leg2, shoe1, shoe2);
   return svg;
 }
 

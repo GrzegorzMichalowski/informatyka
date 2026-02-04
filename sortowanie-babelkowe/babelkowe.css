@@ -154,6 +154,7 @@
   width: 48px;
   height: calc(var(--h) * 1px);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
+  animation: breathe 3.4s ease-in-out infinite;
 }
 
 .student .person svg {
@@ -190,6 +191,15 @@
   box-shadow: 0 0 0 4px rgba(78, 140, 255, 0.5);
   transform: translateY(-4px);
   border-radius: 12px;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 .info {
