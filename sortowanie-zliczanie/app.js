@@ -1,8 +1,9 @@
-const STUDENT_COUNT = 5;
-const HEIGHT_MIN = 120;
-const HEIGHT_MAX = 180;
+const N = 5;
+const MAXV = 9;
 
-const studentsEl = document.getElementById("students");
+const valuesRow = document.getElementById("valuesRow");
+const countsRow = document.getElementById("countsRow");
+const outputRow = document.getElementById("outputRow");
 const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const stepBtn = document.getElementById("stepBtn");
@@ -12,14 +13,12 @@ const soundBtn = document.getElementById("soundBtn");
 const quietDefault = document.getElementById("quietDefault");
 const styleSelect = document.getElementById("styleSelect");
 const stylePreview = document.getElementById("stylePreview");
-const slowCompare = document.getElementById("slowCompare");
 const speedRange = document.getElementById("speedRange");
 const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
 const descriptionEl = document.getElementById("description");
-const hoverTextEl = document.getElementById("hoverText");
-const heightsInput = document.getElementById("heightsInput");
-const applyHeightsBtn = document.getElementById("applyHeightsBtn");
+const valuesInput = document.getElementById("valuesInput");
+const applyValuesBtn = document.getElementById("applyValuesBtn");
 const inputErrorEl = document.getElementById("inputError");
 
 const codeCpp = document.getElementById("codeCpp");
@@ -45,58 +44,56 @@ const STYLES = {
     pants: ["#a0a0a0", "#8d99ae", "#b0a8b9"],
   },
 };
-const STYLE_KEY = "informatykaAvatarStyle";
-const SLOW_KEY = "informatykaSlowCompare";
 
-let initialHeights = createRandomHeights();
-let heights = [...initialHeights];
-let steps = createSteps(initialHeights);
-let stepIndex = 0;
-let timer = null;
-let running = false;
-let sortedUpto = -1;
-let currentI = null;
-let currentJ = null;
-let currentMin = null;
-let soundEnabled = true;
-let audioCtx = null;
+const STYLE_KEY = "informatykaAvatarStyle";
 const MUTE_KEY = "informatykaMuteDefault";
 
 const codeMap = {
-  select_i: { cpp: [10, 11], py: [7, 8] },
-  compare: { cpp: [12, 13], py: [9, 10] },
-  new_min: { cpp: [13], py: [10, 11] },
-  swap: { cpp: [15], py: [12, 13] },
-  no_swap: { cpp: [15], py: [12] },
+  count: { cpp: [6], py: [7] },
+  scan_v: { cpp: [8], py: [9] },
+  write: { cpp: [9, 10], py: [10, 11] },
   done: { cpp: [], py: [] },
 };
 
-function setInputValue(values) {
-  heightsInput.value = values.join(", ");
+let values = createRandomValues();
+let counts = Array(MAXV + 1).fill(0);
+let output = Array(N).fill(null);
+let steps = createSteps(values);
+let stepIndex = 0;
+let timer = null;
+let running = false;
+let currentIndex = null;
+let currentValue = null;
+let currentCountIndex = null;
+let currentOutIndex = null;
+let soundEnabled = true;
+let audioCtx = null;
+
+function setInputValue(vals) {
+  valuesInput.value = vals.join(", ");
 }
 
-function createRandomHeights() {
+function createRandomValues() {
   const result = [];
-  for (let i = 0; i < STUDENT_COUNT; i += 1) {
-    const h = Math.floor(Math.random() * (HEIGHT_MAX - HEIGHT_MIN + 1)) + HEIGHT_MIN;
-    result.push(h);
+  for (let i = 0; i < N; i += 1) {
+    result.push(Math.floor(Math.random() * (MAXV + 1)));
   }
   return result;
 }
 
-function parseHeightsInput(value) {
+function parseValuesInput(value) {
   const raw = value
     .split(",")
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 
-  if (raw.length !== STUDENT_COUNT) {
-    return { error: `Podaj dokładnie ${STUDENT_COUNT} liczb.` };
+  if (raw.length !== N) {
+    return { error: `Podaj dokładnie ${N} liczb.` };
   }
 
   const numbers = raw.map((item) => Number(item));
-  if (numbers.some((num) => Number.isNaN(num) || num <= 0)) {
-    return { error: "Wpisz tylko dodatnie liczby." };
+  if (numbers.some((num) => Number.isNaN(num) || num < 0 || num > MAXV)) {
+    return { error: `Wpisz tylko liczby 0–${MAXV}.` };
   }
 
   return { values: numbers };
@@ -129,13 +126,10 @@ function createAvatarSvg(idx) {
   let hairTop = document.createElementNS(svgNs, "path");
   hairTop.setAttribute("fill", hair);
   if (hairStyle === 0) {
-    // grzywka
     hairTop.setAttribute("d", "M16 20 C18 6, 42 6, 44 20 Z");
   } else if (hairStyle === 1) {
-    // kucyk
     hairTop.setAttribute("d", "M18 20 C20 6, 40 6, 42 20 Z");
   } else {
-    // czapka
     hairTop.setAttribute("d", "M16 22 C18 8, 42 8, 44 22 Z");
   }
 
@@ -261,40 +255,20 @@ function renderStylePreview() {
 }
 
 function createSteps(arr) {
-  const copy = [...arr];
   const out = [];
+  const countsLocal = Array(MAXV + 1).fill(0);
 
-  for (let i = 0; i < copy.length - 1; i += 1) {
-    let min = i;
-    out.push({ type: "select_i", i });
+  for (let i = 0; i < arr.length; i += 1) {
+    countsLocal[arr[i]] += 1;
+    out.push({ type: "count", i, val: arr[i] });
+  }
 
-    for (let j = i + 1; j < copy.length; j += 1) {
-      out.push({
-        type: "compare",
-        i,
-        j,
-        min,
-        valJ: copy[j],
-        valMin: copy[min],
-      });
-
-      if (copy[j] < copy[min]) {
-        min = j;
-        out.push({
-          type: "new_min",
-          i,
-          j,
-          min,
-          valMin: copy[min],
-        });
-      }
-    }
-
-    if (min !== i) {
-      out.push({ type: "swap", i, min, valI: copy[i], valMin: copy[min] });
-      [copy[i], copy[min]] = [copy[min], copy[i]];
-    } else {
-      out.push({ type: "no_swap", i, valI: copy[i] });
+  let k = 0;
+  for (let v = 0; v <= MAXV; v += 1) {
+    out.push({ type: "scan_v", v });
+    for (let c = 0; c < countsLocal[v]; c += 1) {
+      out.push({ type: "write", v, outIndex: k });
+      k += 1;
     }
   }
 
@@ -312,29 +286,14 @@ function ensureAudio() {
   }
 }
 
-function playBeep() {
-  if (!soundEnabled || !audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = "triangle";
-  osc.frequency.value = 520;
-  gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.14);
-}
-
-function playCompareBeep() {
+function playCountBeep() {
   if (!soundEnabled || !audioCtx) return;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.type = "sine";
-  osc.frequency.value = 360;
+  osc.frequency.value = 320;
   gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.07, audioCtx.currentTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.01);
   gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
   osc.connect(gain);
   gain.connect(audioCtx.destination);
@@ -342,50 +301,70 @@ function playCompareBeep() {
   osc.stop(audioCtx.currentTime + 0.09);
 }
 
+function playWriteBeep() {
+  if (!soundEnabled || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "triangle";
+  osc.frequency.value = 560;
+  gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.14);
+}
+
 function render() {
-  studentsEl.innerHTML = "";
-  const scale = 2.1;
-
-  heights.forEach((height, idx) => {
-    const student = document.createElement("div");
-    student.className = "student";
-    student.style.setProperty("--h", Math.round(height * scale));
-    student.dataset.index = String(idx + 1);
-    student.dataset.height = String(height);
-
+  valuesRow.innerHTML = "";
+  values.forEach((val, idx) => {
+    const card = document.createElement("div");
+    card.className = "student";
     const person = document.createElement("div");
     person.className = "person";
     person.appendChild(createAvatarSvg(idx));
-
     const label = document.createElement("div");
     label.className = "label";
-    label.textContent = `${height} cm`;
+    label.textContent = String(val);
+    card.append(person, label);
+    valuesRow.appendChild(card);
+  });
 
-    student.append(person, label);
-    studentsEl.appendChild(student);
+  countsRow.innerHTML = "";
+  for (let v = 0; v <= MAXV; v += 1) {
+    const cell = document.createElement("div");
+    cell.className = "count-cell";
+    cell.textContent = `${v}: ${counts[v]}`;
+    countsRow.appendChild(cell);
+  }
 
-    student.addEventListener("mouseenter", () => {
-      hoverTextEl.textContent = `Wskazanie: uczeń ${student.dataset.index}, wzrost ${student.dataset.height} cm.`;
-    });
-
-    student.addEventListener("mouseleave", () => {
-      hoverTextEl.textContent = "Wskazanie: najedź myszą na ucznia.";
-    });
+  outputRow.innerHTML = "";
+  output.forEach((val) => {
+    const cell = document.createElement("div");
+    cell.className = "output-cell";
+    cell.textContent = val === null ? "–" : String(val);
+    outputRow.appendChild(cell);
   });
 
   applyHighlights();
 }
 
 function applyHighlights() {
-  const nodes = Array.from(studentsEl.children);
+  const valueNodes = Array.from(valuesRow.children);
+  const countNodes = Array.from(countsRow.children);
+  const outNodes = Array.from(outputRow.children);
 
-  nodes.forEach((node, idx) => {
-    node.classList.remove("current", "scan", "min", "sorted");
+  valueNodes.forEach((node, idx) => {
+    node.classList.toggle("scan", idx === currentIndex);
+  });
 
-    if (idx <= sortedUpto) node.classList.add("sorted");
-    if (idx === currentI) node.classList.add("current");
-    if (idx === currentJ) node.classList.add("scan");
-    if (idx === currentMin) node.classList.add("min");
+  countNodes.forEach((node, idx) => {
+    node.classList.toggle("active", idx === currentCountIndex);
+  });
+
+  outNodes.forEach((node, idx) => {
+    node.classList.toggle("active", idx === currentOutIndex);
   });
 }
 
@@ -394,11 +373,7 @@ function setActiveLines(blockEl, lines) {
   const items = Array.from(blockEl.querySelectorAll(".code-line"));
   items.forEach((line) => {
     const num = Number(line.dataset.line);
-    if (lines.includes(num)) {
-      line.classList.add("active-line");
-    } else {
-      line.classList.remove("active-line");
-    }
+    line.classList.toggle("active-line", lines.includes(num));
   });
 }
 
@@ -410,18 +385,14 @@ function updateCodeHighlight(stepType) {
 
 function describeStep(step) {
   switch (step.type) {
-    case "select_i":
-      return `Zaczynamy nowe ustawianie. Pozycja i = ${step.i + 1}. Szukamy najmniejszego wzrostu w pozostałych.`;
-    case "compare":
-      return `Porównuję ucznia na pozycji j = ${step.j + 1} (${step.valJ} cm) z najmniejszym znalezionym (${step.valMin} cm).`;
-    case "new_min":
-      return `Nowy najmniejszy wzrost to ${step.valMin} cm na pozycji ${step.min + 1}.`;
-    case "swap":
-      return `Zamieniam uczniów: pozycja ${step.i + 1} (${step.valI} cm) z pozycją ${step.min + 1} (${step.valMin} cm).`;
-    case "no_swap":
-      return `Nie trzeba zamiany. Pozycja ${step.i + 1} jest już najmniejsza (${step.valI} cm).`;
+    case "count":
+      return `Zliczam wartość ${step.val}. Zwiększam licznik.`;
+    case "scan_v":
+      return `Sprawdzam liczbę ${step.v} w tablicy liczniki.`;
+    case "write":
+      return `Wpisuję ${step.v} do wyniku na pozycję ${step.outIndex + 1}.`;
     case "done":
-      return "Gotowe! Wszyscy uczniowie są ustawieni od najmniejszego do największego.";
+      return "Gotowe! Zbiór jest posortowany.";
     default:
       return "";
   }
@@ -436,53 +407,31 @@ function updateStatus(step) {
 function applyStep(step) {
   if (!step) return;
 
-  if (step.type === "select_i") {
-    currentI = step.i;
-    currentJ = null;
-    currentMin = step.i;
+  if (step.type === "count") {
+    currentIndex = step.i;
+    currentValue = step.val;
+    currentCountIndex = step.val;
+    counts[step.val] += 1;
+    playCountBeep();
   }
 
-  if (step.type === "compare") {
-    currentI = step.i;
-    currentJ = step.j;
-    currentMin = step.min;
-    playCompareBeep();
+  if (step.type === "scan_v") {
+    currentIndex = null;
+    currentValue = step.v;
+    currentCountIndex = step.v;
   }
 
-  if (step.type === "new_min") {
-    currentI = step.i;
-    currentJ = step.j;
-    currentMin = step.min;
-  }
-
-  if (step.type === "swap") {
-    currentI = step.i;
-    currentJ = null;
-    currentMin = step.min;
-    [heights[step.i], heights[step.min]] = [heights[step.min], heights[step.i]];
-    sortedUpto = step.i;
-    playBeep();
-    const nodes = Array.from(studentsEl.children);
-    if (nodes[step.i]) nodes[step.i].classList.add("swapping");
-    if (nodes[step.min]) nodes[step.min].classList.add("swapping");
-    setTimeout(() => {
-      if (nodes[step.i]) nodes[step.i].classList.remove("swapping");
-      if (nodes[step.min]) nodes[step.min].classList.remove("swapping");
-    }, 320);
-  }
-
-  if (step.type === "no_swap") {
-    currentI = step.i;
-    currentJ = null;
-    currentMin = step.i;
-    sortedUpto = step.i;
+  if (step.type === "write") {
+    currentOutIndex = step.outIndex;
+    output[step.outIndex] = step.v;
+    playWriteBeep();
   }
 
   if (step.type === "done") {
-    currentI = null;
-    currentJ = null;
-    currentMin = null;
-    sortedUpto = heights.length - 1;
+    currentIndex = null;
+    currentCountIndex = null;
+    currentOutIndex = null;
+    values = [...output];
     stop();
   }
 
@@ -491,19 +440,11 @@ function applyStep(step) {
   updateCodeHighlight(step.type);
 }
 
-function getBaseDelay() {
+function nextDelayFor() {
   const min = Number(speedRange.min);
   const max = Number(speedRange.max);
   const value = Number(speedRange.value);
   return Math.max(120, min + max - value);
-}
-
-function nextDelayFor(step) {
-  const base = getBaseDelay();
-  if (slowCompare && slowCompare.checked && step && step.type === "compare") {
-    return Math.round(base * 1.6);
-  }
-  return base;
 }
 
 function scheduleNext() {
@@ -512,8 +453,7 @@ function scheduleNext() {
     stop();
     return;
   }
-  const upcoming = steps[stepIndex];
-  const delay = nextDelayFor(upcoming);
+  const delay = nextDelayFor();
   timer = setTimeout(() => {
     const step = steps[stepIndex];
     stepIndex += 1;
@@ -539,13 +479,15 @@ function stop() {
 
 function reset() {
   stop();
-  heights = [...initialHeights];
-  steps = createSteps(heights);
+  values = [...values];
+  counts = Array(MAXV + 1).fill(0);
+  output = Array(N).fill(null);
+  steps = createSteps(values);
   stepIndex = 0;
-  sortedUpto = -1;
-  currentI = null;
-  currentJ = null;
-  currentMin = null;
+  currentIndex = null;
+  currentValue = null;
+  currentCountIndex = null;
+  currentOutIndex = null;
   render();
   updateStatus({ type: "init" });
   descriptionEl.textContent = "Gotowe do startu. Wybierz Start lub Krok.";
@@ -575,9 +517,9 @@ resetBtn.addEventListener("click", () => {
 });
 
 newSetBtn.addEventListener("click", () => {
-  initialHeights = createRandomHeights();
+  values = createRandomValues();
+  setInputValue(values);
   reset();
-  setInputValue(initialHeights);
   inputErrorEl.textContent = "";
 });
 
@@ -595,15 +537,14 @@ quietDefault.addEventListener("change", () => {
   if (soundEnabled) ensureAudio();
 });
 
-applyHeightsBtn.addEventListener("click", () => {
-  const { values, error } = parseHeightsInput(heightsInput.value);
+applyValuesBtn.addEventListener("click", () => {
+  const { values: newValues, error } = parseValuesInput(valuesInput.value);
   if (error) {
     inputErrorEl.textContent = error;
     return;
   }
-
   inputErrorEl.textContent = "";
-  initialHeights = values;
+  values = newValues;
   reset();
 });
 
@@ -622,7 +563,7 @@ if (styleSelect) {
   });
 }
 
-setInputValue(initialHeights);
+setInputValue(values);
 const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";
 quietDefault.checked = mutedDefault;
 soundEnabled = !mutedDefault;
@@ -630,13 +571,6 @@ soundBtn.textContent = soundEnabled ? "Dźwięk: WŁ" : "Dźwięk: WYŁ";
 const savedStyle = localStorage.getItem(STYLE_KEY);
 if (styleSelect && savedStyle) {
   styleSelect.value = savedStyle;
-}
-const savedSlow = localStorage.getItem(SLOW_KEY) === "1";
-if (slowCompare) {
-  slowCompare.checked = savedSlow;
-  slowCompare.addEventListener("change", () => {
-    localStorage.setItem(SLOW_KEY, slowCompare.checked ? "1" : "0");
-  });
 }
 renderStylePreview();
 render();

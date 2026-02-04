@@ -61,11 +61,11 @@ let audioCtx = null;
 const MUTE_KEY = "informatykaMuteDefault";
 
 const codeMap = {
-  start_pass: { cpp: [4], py: [4] },
-  compare: { cpp: [5, 6], py: [5, 6] },
-  swap: { cpp: [6, 7], py: [6, 7] },
-  no_swap: { cpp: [6], py: [6] },
-  pass_done: { cpp: [4], py: [4] },
+  start_pass: { cpp: [10], py: [7] },
+  compare: { cpp: [11, 12], py: [8, 9] },
+  swap: { cpp: [12], py: [10] },
+  no_swap: { cpp: [12], py: [9] },
+  pass_done: { cpp: [10], py: [7] },
   done: { cpp: [], py: [] },
 };
 

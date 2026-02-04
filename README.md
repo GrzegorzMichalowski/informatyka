@@ -37,3 +37,9 @@ Sortowanie przez wybieranie polega na tym, że dla każdej pozycji `i`:
 - `sortowanie-babelkowe/index.html`
 - `sortowanie-babelkowe/babelkowe.css`
 - `sortowanie-babelkowe/app.js`
+- `sortowanie-zliczanie/index.html`
+- `sortowanie-zliczanie/zliczanie.css`
+- `sortowanie-zliczanie/app.js`
+- `wyszukiwanie-binarne/index.html`
+- `wyszukiwanie-binarne/binarne.css`
+- `wyszukiwanie-binarne/app.js`

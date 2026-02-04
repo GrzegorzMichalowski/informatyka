@@ -87,30 +87,37 @@
       <div class="code-column">
         <h2>C++ (z komentarzami)</h2>
         <div class="code-block" id="codeCpp">
-          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">// Sortowanie bąbelkowe</span></div>
-          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">void bubbleSort(vector&lt;int&gt;&amp; a) {</span></div>
-          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">  int n = a.size();</span></div>
-          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">  for (int i = 0; i &lt; n - 1; i++) { // kolejne przebiegi</span></div>
-          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">    for (int j = 0; j &lt; n - i - 1; j++) { // porównujemy pary</span></div>
-          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">      if (a[j] &gt; a[j + 1]) { // jeśli kolejność zła</span></div>
-          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">        swap(a[j], a[j + 1]); // zamiana sąsiadów</span></div>
-          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">      }</span></div>
-          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">    }</span></div>
-          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">  }</span></div>
-          <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">}</span></div>
+          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">const int N = 5;</span></div>
+          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">int a[N];</span></div>
+          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">void WprowadzDane() {</span></div>
+          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">  for (int i = 0; i &lt; N; i++) {</span></div>
+          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">    cout &lt;&lt; \"Podaj dane nr \" &lt;&lt; i &lt;&lt; \": \";</span></div>
+          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">    cin &gt;&gt; a[i];</span></div>
+          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">  }</span></div>
+          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">}</span></div>
+          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">void SortujBabelkowo() {</span></div>
+          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">  for (int i = 0; i &lt; N - 1; i++) {</span></div>
+          <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">    for (int j = 0; j &lt; N - i - 1; j++) {</span></div>
+          <div class="code-line" data-line="12"><span class="line-no">12</span><span class="line-text">      if (a[j] &gt; a[j + 1]) swap(a[j], a[j + 1]);</span></div>
+          <div class="code-line" data-line="13"><span class="line-no">13</span><span class="line-text">    }</span></div>
+          <div class="code-line" data-line="14"><span class="line-no">14</span><span class="line-text">  }</span></div>
+          <div class="code-line" data-line="15"><span class="line-no">15</span><span class="line-text">}</span></div>
         </div>
       </div>
 
       <div class="code-column">
         <h2>Python (z komentarzami)</h2>
         <div class="code-block" id="codePy">
-          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text"># Sortowanie bąbelkowe</span></div>
-          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">def bubble_sort(a):</span></div>
-          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">    n = len(a)</span></div>
-          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">    for i in range(n - 1):  # kolejne przebiegi</span></div>
-          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">        for j in range(n - i - 1):  # porównujemy pary</span></div>
-          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">            if a[j] &gt; a[j + 1]:  # zła kolejność</span></div>
-          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">                a[j], a[j + 1] = a[j + 1], a[j]  # zamiana</span></div>
+          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">N = 5</span></div>
+          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">a = [0] * N</span></div>
+          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">def WprowadzDane():</span></div>
+          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">    for i in range(N):</span></div>
+          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">        a[i] = int(input(\"Podaj dane nr \" + str(i) + \": \"))</span></div>
+          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">def SortujBabelkowo():</span></div>
+          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">    for i in range(N - 1):</span></div>
+          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">        for j in range(N - i - 1):</span></div>
+          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">            if a[j] &gt; a[j + 1]:</span></div>
+          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">                a[j], a[j + 1] = a[j + 1], a[j]</span></div>
         </div>
       </div>
       </section>

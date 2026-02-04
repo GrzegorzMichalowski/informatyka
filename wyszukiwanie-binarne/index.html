@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wyszukiwanie binarne – wizualizacja</title>
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="binarne.css" />
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs">
+      <a href="../index.html">← Powrót do strony głównej</a>
+    </nav>
+
+    <header class="hero">
+      <h1>Wyszukiwanie binarne</h1>
+      <p class="subtitle">Szukamy elementu w uporządkowanym zbiorze przez połowienie.</p>
+    </header>
+
+    <section class="controls">
+      <button id="startBtn">Start</button>
+      <button id="pauseBtn">Pauza</button>
+      <button id="stepBtn">Krok</button>
+      <button id="resetBtn">Reset</button>
+      <button id="newSetBtn" class="secondary">Nowy zestaw</button>
+      <button id="soundBtn" class="secondary">Dźwięk: WŁ</button>
+      <label class="quiet-toggle">
+        <input id="quietDefault" type="checkbox" />
+        Tryb cichy domyślnie
+      </label>
+      <div class="speed">
+        <label for="speedRange">Tempo</label>
+        <input id="speedRange" type="range" min="300" max="1400" value="900" step="100" />
+      </div>
+    </section>
+
+    <section class="input-panel card">
+      <div class="input-row">
+        <label for="valuesInput">Wartości (5 liczb rosnąco, rozdzielone przecinkami):</label>
+        <textarea id="valuesInput" rows="2" placeholder="np. 2, 4, 6, 8, 10"></textarea>
+      </div>
+      <div class="input-row">
+        <label for="targetInput">Szukana wartość:</label>
+        <input id="targetInput" type="number" />
+      </div>
+      <div class="input-actions">
+        <button id="applyValuesBtn" class="secondary">Ustaw dane</button>
+        <span id="inputError" class="input-error" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="learning-zone">
+      <div class="visual-panel">
+        <section class="board card">
+          <div class="row-title">Tablica uporządkowana</div>
+          <div id="arrayRow" class="array-row"></div>
+        </section>
+
+        <section class="info">
+          <div class="status">
+            <span id="stepCounter">Krok: 0</span>
+            <span id="statusText">Gotowe do startu.</span>
+          </div>
+          <div id="description" class="description"></div>
+        </section>
+
+        <div class="sound-legend">Dźwięki: niski = porównanie, wyższy = znaleziono.</div>
+      </div>
+
+      <section class="code-area">
+        <div class="code-column">
+          <h2>C++ (styl szkolny)</h2>
+          <div class="code-block" id="codeCpp">
+            <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">const int N = 5;</span></div>
+            <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">int a[N];</span></div>
+            <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">int SzukajBinarnie(int x) {</span></div>
+            <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">  int l = 0, p = N - 1;</span></div>
+            <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">  while (l &lt;= p) {</span></div>
+            <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">    int s = (l + p) / 2;</span></div>
+            <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">    if (a[s] == x) return s;</span></div>
+            <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">    if (a[s] &lt; x) l = s + 1; else p = s - 1;</span></div>
+            <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">  }</span></div>
+            <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">  return -1;</span></div>
+            <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">}</span></div>
+          </div>
+        </div>
+        <div class="code-column">
+          <h2>Python (styl szkolny)</h2>
+          <div class="code-block" id="codePy">
+            <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">N = 5</span></div>
+            <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">a = [0] * N</span></div>
+            <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">def SzukajBinarnie(x):</span></div>
+            <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">    l = 0</span></div>
+            <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">    p = N - 1</span></div>
+            <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">    while l &lt;= p:</span></div>
+            <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">        s = (l + p) // 2</span></div>
+            <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">        if a[s] == x: return s</span></div>
+            <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">        if a[s] &lt; x: l = s + 1</span></div>
+            <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">        else: p = s - 1</span></div>
+            <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">    return -1</span></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="next-tool">
+      <a class="next-link" href="../sortowanie-wybieranie/">Następne narzędzie: sortowanie przez wybieranie →</a>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

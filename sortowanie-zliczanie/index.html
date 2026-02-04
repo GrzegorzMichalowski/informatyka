@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sortowanie przez zliczanie – wizualizacja</title>
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="zliczanie.css" />
+</head>
+<body>
+  <main class="page">
+    <nav class="breadcrumbs">
+      <a href="../index.html">← Powrót do strony głównej</a>
+    </nav>
+
+    <header class="hero">
+      <h1>Sortowanie przez zliczanie</h1>
+      <p class="subtitle">Liczymy wystąpienia wartości i odtwarzamy uporządkowaną listę.</p>
+    </header>
+
+    <section class="controls">
+      <button id="startBtn">Start</button>
+      <button id="pauseBtn">Pauza</button>
+      <button id="stepBtn">Krok</button>
+      <button id="resetBtn">Reset</button>
+      <button id="newSetBtn" class="secondary">Nowy zestaw</button>
+      <button id="soundBtn" class="secondary">Dźwięk: WŁ</button>
+      <label class="quiet-toggle">
+        <input id="quietDefault" type="checkbox" />
+        Tryb cichy domyślnie
+      </label>
+      <div class="style-picker">
+        <label for="styleSelect">Styl postaci</label>
+        <select id="styleSelect">
+          <option value="school">Szkolny</option>
+          <option value="sport">Sportowy</option>
+          <option value="pastel">Pastelowy</option>
+        </select>
+        <div id="stylePreview" class="style-preview" aria-hidden="true"></div>
+      </div>
+      <div class="speed">
+        <label for="speedRange">Tempo</label>
+        <input id="speedRange" type="range" min="300" max="1400" value="900" step="100" />
+      </div>
+    </section>
+
+    <section class="input-panel card">
+      <div class="input-row">
+        <label for="valuesInput">Wartości (5 liczb od 0 do 9, rozdzielone przecinkami):</label>
+        <textarea id="valuesInput" rows="2" placeholder="np. 4, 2, 7, 3, 2"></textarea>
+      </div>
+      <div class="input-actions">
+        <button id="applyValuesBtn" class="secondary">Ustaw wartości</button>
+        <span id="inputError" class="input-error" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="learning-zone">
+      <div class="visual-panel">
+        <section class="board card">
+          <div class="row-title">Dane wejściowe</div>
+          <div id="valuesRow" class="students" aria-live="polite"></div>
+
+          <div class="row-title">Tablica liczniki</div>
+          <div id="countsRow" class="count-row"></div>
+
+          <div class="row-title">Wynik</div>
+          <div id="outputRow" class="output-row"></div>
+        </section>
+
+        <section class="info">
+          <div class="status">
+            <span id="stepCounter">Krok: 0</span>
+            <span id="statusText">Gotowe do startu.</span>
+          </div>
+          <div id="description" class="description"></div>
+        </section>
+
+        <div class="sound-legend">Dźwięki: niski = zliczanie, wyższy = wpis do wyniku.</div>
+      </div>
+
+      <section class="code-area">
+        <div class="code-column">
+          <h2>C++ (styl szkolny)</h2>
+          <div class="code-block" id="codeCpp">
+            <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">const int N = 5;</span></div>
+            <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">const int MAXV = 9;</span></div>
+            <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">int a[N], liczniki[MAXV+1];</span></div>
+            <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">void SortujPrzezZliczanie() {</span></div>
+            <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">  for (int i = 0; i &lt;= MAXV; i++) liczniki[i] = 0;</span></div>
+            <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">  for (int i = 0; i &lt; N; i++) liczniki[a[i]]++;</span></div>
+            <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">  int k = 0;</span></div>
+            <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">  for (int v = 0; v &lt;= MAXV; v++)</span></div>
+            <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">    for (int c = 0; c &lt; liczniki[v]; c++) {</span></div>
+            <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">      a[k] = v; k++;</span></div>
+            <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">    }</span></div>
+            <div class="code-line" data-line="12"><span class="line-no">12</span><span class="line-text">}</span></div>
+          </div>
+        </div>
+        <div class="code-column">
+          <h2>Python (styl szkolny)</h2>
+          <div class="code-block" id="codePy">
+            <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">N = 5</span></div>
+            <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">MAXV = 9</span></div>
+            <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">a = [0] * N</span></div>
+            <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">liczniki = [0] * (MAXV + 1)</span></div>
+            <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">def SortujPrzezZliczanie():</span></div>
+            <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">    for i in range(MAXV + 1): liczniki[i] = 0</span></div>
+            <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">    for i in range(N): liczniki[a[i]] += 1</span></div>
+            <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">    k = 0</span></div>
+            <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">    for v in range(MAXV + 1):</span></div>
+            <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">        for c in range(liczniki[v]):</span></div>
+            <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">            a[k] = v; k += 1</span></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="next-tool">
+      <a class="next-link" href="../wyszukiwanie-binarne/">Następne narzędzie: wyszukiwanie binarne →</a>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

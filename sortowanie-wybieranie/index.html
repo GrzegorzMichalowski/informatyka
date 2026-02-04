@@ -87,35 +87,42 @@
       <div class="code-column">
         <h2>C++ (z komentarzami)</h2>
         <div class="code-block" id="codeCpp">
-          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">// Sortowanie przez wybieranie</span></div>
-          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">void selectionSort(vector&lt;int&gt;&amp; a) {</span></div>
-          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">  int n = a.size();</span></div>
-          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">  for (int i = 0; i &lt; n - 1; i++) { // wybieramy pozycję i</span></div>
-          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">    int minIdx = i; // zakładamy, że i jest najmniejsze</span></div>
-          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">    for (int j = i + 1; j &lt; n; j++) { // szukamy mniejszego</span></div>
-          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">      if (a[j] &lt; a[minIdx]) { // porównanie</span></div>
-          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">        minIdx = j; // zapamiętujemy nowy minimum</span></div>
-          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">      }</span></div>
-          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">    }</span></div>
-          <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">    if (minIdx != i) swap(a[i], a[minIdx]); // zamiana</span></div>
-          <div class="code-line" data-line="12"><span class="line-no">12</span><span class="line-text">  }</span></div>
-          <div class="code-line" data-line="13"><span class="line-no">13</span><span class="line-text">}</span></div>
+          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">const int N = 5;</span></div>
+          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">int a[N];</span></div>
+          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">void WprowadzDane() {</span></div>
+          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">  for (int i = 0; i &lt; N; i++) {</span></div>
+          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">    cout &lt;&lt; \"Podaj dane nr \" &lt;&lt; i &lt;&lt; \": \";</span></div>
+          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">    cin &gt;&gt; a[i];</span></div>
+          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">  }</span></div>
+          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">}</span></div>
+          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">void SortujPrzezWybieranie() {</span></div>
+          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">  for (int i = 0; i &lt; N - 1; i++) {</span></div>
+          <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">    int min = i;</span></div>
+          <div class="code-line" data-line="12"><span class="line-no">12</span><span class="line-text">    for (int j = i + 1; j &lt; N; j++) {</span></div>
+          <div class="code-line" data-line="13"><span class="line-no">13</span><span class="line-text">      if (a[j] &lt; a[min]) min = j;</span></div>
+          <div class="code-line" data-line="14"><span class="line-no">14</span><span class="line-text">    }</span></div>
+          <div class="code-line" data-line="15"><span class="line-no">15</span><span class="line-text">    if (min != i) swap(a[i], a[min]);</span></div>
+          <div class="code-line" data-line="16"><span class="line-no">16</span><span class="line-text">  }</span></div>
+          <div class="code-line" data-line="17"><span class="line-no">17</span><span class="line-text">}</span></div>
         </div>
       </div>
 
       <div class="code-column">
         <h2>Python (z komentarzami)</h2>
         <div class="code-block" id="codePy">
-          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text"># Sortowanie przez wybieranie</span></div>
-          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">def selection_sort(a):</span></div>
-          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">    n = len(a)</span></div>
-          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">    for i in range(n - 1):  # wybieramy pozycję i</span></div>
-          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">        min_idx = i  # zakładamy, że i jest najmniejsze</span></div>
-          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">        for j in range(i + 1, n):  # szukamy mniejszego</span></div>
-          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">            if a[j] &lt; a[min_idx]:  # porównanie</span></div>
-          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">                min_idx = j  # nowe minimum</span></div>
-          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">        if min_idx != i:</span></div>
-          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">            a[i], a[min_idx] = a[min_idx], a[i]  # zamiana</span></div>
+          <div class="code-line" data-line="1"><span class="line-no">1</span><span class="line-text">N = 5</span></div>
+          <div class="code-line" data-line="2"><span class="line-no">2</span><span class="line-text">a = [0] * N</span></div>
+          <div class="code-line" data-line="3"><span class="line-no">3</span><span class="line-text">def WprowadzDane():</span></div>
+          <div class="code-line" data-line="4"><span class="line-no">4</span><span class="line-text">    for i in range(N):</span></div>
+          <div class="code-line" data-line="5"><span class="line-no">5</span><span class="line-text">        a[i] = int(input(\"Podaj dane nr \" + str(i) + \": \"))</span></div>
+          <div class="code-line" data-line="6"><span class="line-no">6</span><span class="line-text">def SortujPrzezWybieranie():</span></div>
+          <div class="code-line" data-line="7"><span class="line-no">7</span><span class="line-text">    for i in range(N - 1):</span></div>
+          <div class="code-line" data-line="8"><span class="line-no">8</span><span class="line-text">        min = i</span></div>
+          <div class="code-line" data-line="9"><span class="line-no">9</span><span class="line-text">        for j in range(i + 1, N):</span></div>
+          <div class="code-line" data-line="10"><span class="line-no">10</span><span class="line-text">            if a[j] &lt; a[min]:</span></div>
+          <div class="code-line" data-line="11"><span class="line-no">11</span><span class="line-text">                min = j</span></div>
+          <div class="code-line" data-line="12"><span class="line-no">12</span><span class="line-text">        if min != i:</span></div>
+          <div class="code-line" data-line="13"><span class="line-no">13</span><span class="line-text">            a[i], a[min] = a[min], a[i]</span></div>
         </div>
       </div>
       </section>
