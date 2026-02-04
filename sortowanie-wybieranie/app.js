@@ -125,9 +125,19 @@ function createAvatarSvg(idx) {
   head.setAttribute("r", "12");
   head.setAttribute("fill", skin);
 
-  const hairTop = document.createElementNS(svgNs, "path");
-  hairTop.setAttribute("d", "M18 18 C20 6, 40 6, 42 18 Z");
+  const hairStyle = idx % 3;
+  let hairTop = document.createElementNS(svgNs, "path");
   hairTop.setAttribute("fill", hair);
+  if (hairStyle === 0) {
+    // grzywka
+    hairTop.setAttribute("d", "M16 20 C18 6, 42 6, 44 20 Z");
+  } else if (hairStyle === 1) {
+    // kucyk
+    hairTop.setAttribute("d", "M18 20 C20 6, 40 6, 42 20 Z");
+  } else {
+    // czapka
+    hairTop.setAttribute("d", "M16 22 C18 8, 42 8, 44 22 Z");
+  }
 
   const eye1 = document.createElementNS(svgNs, "circle");
   eye1.setAttribute("cx", "26");
@@ -216,7 +226,31 @@ function createAvatarSvg(idx) {
   shoe2.setAttribute("rx", "3");
   shoe2.setAttribute("fill", "#1b1a2b");
 
-  svg.append(head, hairTop, eye1, eye2, armLeft, armRight, handLeft, handRight, body, belt, leg1, leg2, shoe1, shoe2);
+  const ponytail = document.createElementNS(svgNs, "circle");
+  ponytail.setAttribute("cx", "48");
+  ponytail.setAttribute("cy", "20");
+  ponytail.setAttribute("r", "4");
+  ponytail.setAttribute("fill", hair);
+
+  const cap = document.createElementNS(svgNs, "path");
+  cap.setAttribute("d", "M14 20 C18 4, 42 4, 46 20 Z");
+  cap.setAttribute("fill", hair);
+  const capBill = document.createElementNS(svgNs, "rect");
+  capBill.setAttribute("x", "38");
+  capBill.setAttribute("y", "18");
+  capBill.setAttribute("width", "10");
+  capBill.setAttribute("height", "4");
+  capBill.setAttribute("rx", "2");
+  capBill.setAttribute("fill", hair);
+
+  if (hairStyle === 1) {
+    svg.append(head, hairTop, ponytail);
+  } else if (hairStyle === 2) {
+    svg.append(head, cap, capBill);
+  } else {
+    svg.append(head, hairTop);
+  }
+  svg.append(eye1, eye2, armLeft, armRight, handLeft, handRight, body, belt, leg1, leg2, shoe1, shoe2);
   return svg;
 }
 
@@ -428,6 +462,13 @@ function applyStep(step) {
     [heights[step.i], heights[step.min]] = [heights[step.min], heights[step.i]];
     sortedUpto = step.i;
     playBeep();
+    const nodes = Array.from(studentsEl.children);
+    if (nodes[step.i]) nodes[step.i].classList.add("swapping");
+    if (nodes[step.min]) nodes[step.min].classList.add("swapping");
+    setTimeout(() => {
+      if (nodes[step.i]) nodes[step.i].classList.remove("swapping");
+      if (nodes[step.min]) nodes[step.min].classList.remove("swapping");
+    }, 320);
   }
 
   if (step.type === "no_swap") {

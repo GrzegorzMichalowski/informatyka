@@ -193,6 +193,22 @@
   border-radius: 12px;
 }
 
+.student.swapping .person {
+  animation: swapTilt 0.3s ease-in-out;
+}
+
+@keyframes swapTilt {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
 @keyframes breathe {
   0%, 100% {
     transform: translateY(0);
