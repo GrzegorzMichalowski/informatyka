@@ -321,6 +321,21 @@ function getCountInput() {
   return Math.floor(count);
 }
 
+function getQueryCount() {
+  const params = new URLSearchParams(window.location.search);
+  const n = Number(params.get("n"));
+  if (Number.isNaN(n) || n < 1 || n > 30) return null;
+  return Math.floor(n);
+}
+
+const queryCount = getQueryCount();
+if (queryCount) {
+  N = queryCount;
+  arr = createValues(N);
+  target = arr[Math.floor(Math.random() * arr.length)];
+  steps = createSteps(arr, target);
+}
+
 setInputValue(arr);
 countInput.value = String(N);
 targetInput.value = target;

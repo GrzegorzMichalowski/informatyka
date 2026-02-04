@@ -115,6 +115,16 @@
   background: #fff;
 }
 
+.input-row input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d6cabc;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: #fff;
+}
+
 .input-actions {
   margin-top: 10px;
   display: flex;
@@ -139,6 +149,37 @@
   gap: 10px;
   min-height: 220px;
   flex-wrap: wrap;
+}
+
+.students.compact .student {
+  width: 22px;
+}
+
+.students.compact .label {
+  font-size: 0.7rem;
+}
+
+.bar {
+  width: 100%;
+  height: calc(var(--h) * 1px);
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(180deg, #b7e1a1 0%, #6eae56 100%);
+  border: 2px solid #4f8b3b;
+}
+
+.bar.scan {
+  background: linear-gradient(180deg, #b7e1a1 0%, #6eae56 100%);
+  border-color: #4f8b3b;
+}
+
+.bar.scan2 {
+  background: linear-gradient(180deg, #9ad2f0 0%, #4f8fd3 100%);
+  border-color: #3b6f9b;
+}
+
+.bar.sorted {
+  background: linear-gradient(180deg, #a9e6c8 0%, #5fc28a 100%);
+  border-color: #21c07a;
 }
 
 .student {

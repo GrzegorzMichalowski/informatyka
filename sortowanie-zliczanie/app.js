@@ -579,6 +579,22 @@ function getCountInput() {
   return Math.floor(count);
 }
 
+function getQueryCount() {
+  const params = new URLSearchParams(window.location.search);
+  const n = Number(params.get("n"));
+  if (Number.isNaN(n) || n < 1 || n > 30) return null;
+  return Math.floor(n);
+}
+
+const queryCount = getQueryCount();
+if (queryCount) {
+  N = queryCount;
+  values = createRandomValues(N);
+  counts = Array(MAXV + 1).fill(0);
+  output = Array(N).fill(null);
+  steps = createSteps(values);
+}
+
 setInputValue(values);
 countInput.value = String(N);
 const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";

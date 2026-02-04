@@ -1,4 +1,4 @@
-const STUDENT_COUNT = 5;
+let STUDENT_COUNT = 5;
 const HEIGHT_MIN = 120;
 const HEIGHT_MAX = 180;
 
@@ -13,6 +13,7 @@ const quietDefault = document.getElementById("quietDefault");
 const styleSelect = document.getElementById("styleSelect");
 const stylePreview = document.getElementById("stylePreview");
 const slowCompare = document.getElementById("slowCompare");
+const countInput = document.getElementById("countInput");
 const speedRange = document.getElementById("speedRange");
 const stepCounterEl = document.getElementById("stepCounter");
 const statusTextEl = document.getElementById("statusText");
@@ -48,7 +49,7 @@ const STYLES = {
 const STYLE_KEY = "informatykaAvatarStyle";
 const SLOW_KEY = "informatykaSlowCompare";
 
-let initialHeights = createRandomHeights();
+let initialHeights = createRandomHeights(STUDENT_COUNT);
 let heights = [...initialHeights];
 let steps = createSteps(initialHeights);
 let stepIndex = 0;
@@ -75,9 +76,9 @@ function setInputValue(values) {
   heightsInput.value = values.join(", ");
 }
 
-function createRandomHeights() {
+function createRandomHeights(count) {
   const result = [];
-  for (let i = 0; i < STUDENT_COUNT; i += 1) {
+  for (let i = 0; i < count; i += 1) {
     const h = Math.floor(Math.random() * (HEIGHT_MAX - HEIGHT_MIN + 1)) + HEIGHT_MIN;
     result.push(h);
   }
@@ -90,8 +91,8 @@ function parseHeightsInput(value) {
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
 
-  if (raw.length !== STUDENT_COUNT) {
-    return { error: `Podaj dokładnie ${STUDENT_COUNT} liczb.` };
+  if (raw.length < 1 || raw.length > 30) {
+    return { error: "Podaj od 1 do 30 liczb." };
   }
 
   const numbers = raw.map((item) => Number(item));
@@ -345,6 +346,8 @@ function playCompareBeep() {
 function render() {
   studentsEl.innerHTML = "";
   const scale = 2.1;
+  const compact = heights.length > 8;
+  studentsEl.classList.toggle("compact", compact);
 
   heights.forEach((height, idx) => {
     const student = document.createElement("div");
@@ -353,15 +356,23 @@ function render() {
     student.dataset.index = String(idx + 1);
     student.dataset.height = String(height);
 
-    const person = document.createElement("div");
-    person.className = "person";
-    person.appendChild(createAvatarSvg(idx));
+    if (compact) {
+      const bar = document.createElement("div");
+      bar.className = "bar";
+      bar.title = `${height} cm`;
+      student.appendChild(bar);
+    } else {
+      const person = document.createElement("div");
+      person.className = "person";
+      person.appendChild(createAvatarSvg(idx));
+      student.appendChild(person);
+    }
 
     const label = document.createElement("div");
     label.className = "label";
     label.textContent = `${height} cm`;
 
-    student.append(person, label);
+    student.appendChild(label);
     studentsEl.appendChild(student);
 
     student.addEventListener("mouseenter", () => {
@@ -378,6 +389,7 @@ function render() {
 
 function applyHighlights() {
   const nodes = Array.from(studentsEl.children);
+  const compact = heights.length > 8;
 
   nodes.forEach((node, idx) => {
     node.classList.remove("current", "scan", "min", "sorted");
@@ -386,6 +398,15 @@ function applyHighlights() {
     if (idx === currentI) node.classList.add("current");
     if (idx === currentJ) node.classList.add("scan");
     if (idx === currentMin) node.classList.add("min");
+
+    if (compact) {
+      const bar = node.querySelector(".bar");
+      if (!bar) return;
+      bar.classList.remove("scan", "min", "sorted");
+      if (idx <= sortedUpto) bar.classList.add("sorted");
+      if (idx === currentJ) bar.classList.add("scan");
+      if (idx === currentMin) bar.classList.add("min");
+    }
   });
 }
 
@@ -575,9 +596,13 @@ resetBtn.addEventListener("click", () => {
 });
 
 newSetBtn.addEventListener("click", () => {
-  initialHeights = createRandomHeights();
+  const count = getCountInput();
+  if (count === null) return;
+  STUDENT_COUNT = count;
+  initialHeights = createRandomHeights(STUDENT_COUNT);
   reset();
   setInputValue(initialHeights);
+  countInput.value = String(STUDENT_COUNT);
   inputErrorEl.textContent = "";
 });
 
@@ -603,6 +628,8 @@ applyHeightsBtn.addEventListener("click", () => {
   }
 
   inputErrorEl.textContent = "";
+  STUDENT_COUNT = values.length;
+  countInput.value = String(STUDENT_COUNT);
   initialHeights = values;
   reset();
 });
@@ -622,7 +649,32 @@ if (styleSelect) {
   });
 }
 
+function getCountInput() {
+  const count = Number(countInput.value);
+  if (Number.isNaN(count) || count < 1 || count > 30) {
+    inputErrorEl.textContent = "Liczba uczniów musi być z zakresu 1–30.";
+    return null;
+  }
+  return Math.floor(count);
+}
+
+function getQueryCount() {
+  const params = new URLSearchParams(window.location.search);
+  const n = Number(params.get("n"));
+  if (Number.isNaN(n) || n < 1 || n > 30) return null;
+  return Math.floor(n);
+}
+
+const queryCount = getQueryCount();
+if (queryCount) {
+  STUDENT_COUNT = queryCount;
+  initialHeights = createRandomHeights(STUDENT_COUNT);
+  heights = [...initialHeights];
+  steps = createSteps(initialHeights);
+}
+
 setInputValue(initialHeights);
+countInput.value = String(STUDENT_COUNT);
 const mutedDefault = localStorage.getItem(MUTE_KEY) === "1";
 quietDefault.checked = mutedDefault;
 soundEnabled = !mutedDefault;
