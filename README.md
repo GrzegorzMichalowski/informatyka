@@ -43,3 +43,6 @@ Sortowanie przez wybieranie polega na tym, że dla każdej pozycji `i`:
 - `wyszukiwanie-binarne/index.html`
 - `wyszukiwanie-binarne/binarne.css`
 - `wyszukiwanie-binarne/app.js`
+- `wyszukiwanie-nieuporzadkowane/index.html`
+- `wyszukiwanie-nieuporzadkowane/nieuporzadkowane.css`
+- `wyszukiwanie-nieuporzadkowane/app.js`

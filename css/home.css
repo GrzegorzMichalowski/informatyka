@@ -43,6 +43,10 @@
   animation-delay: 0.44s;
 }
 
+.tool-card:nth-child(5) {
+  animation-delay: 0.57s;
+}
+
 @keyframes cardIn {
   from {
     opacity: 0;
